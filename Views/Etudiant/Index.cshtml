@@ -1,0 +1,110 @@
+﻿@model IEnumerable<Etudiant>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-8">
+                    <u>
+                        Ceci est un test :
+                    </u>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-sm btn-success" data-bs-toggle="modal"
+                        data-bs-target="#modal-ajout-etudiant">
+                        <i class="bi bi-plus-circle"></i>
+                        Add
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered w-100">
+                    <thead>
+                        <tr class="text-center">
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Age</th>
+                            <th>Moyenne générale</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var etud in Model)
+                        {
+                            <tr class="text-center">
+                                <td>@etud.Id</td>
+                                <td>@etud.Nom</td>
+                                <td>@etud.Prenom</td>
+                                <td>@etud.DateNaissance</td>
+                                <td>@etud.MoyenneGenerale</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger">
+                                        D
+                                    </button>
+                                    <button class="btn btn-sm btn-primary">
+                                        E
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-ajout-etudiant" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Ajouter nouvel étudiant
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="Add" asp-controller="Etudiant" method="post">
+                @* @using (Html.BeginForm("Add", "Etudiant", FormMethod.Post))
+                    { *@
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mt-3">
+                            <label for="nom">Nom :</label>
+                            <input type="text" class="form-control form-control-sm" name="nom" id="nom" required>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="prenom">Prénom :</label>
+                            <input type="text" class="form-control form-control-sm" name="prenom" id="prenom" required>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="dateNaissance">Date de naissance :</label>
+                            <input type="date" class="form-control form-control-sm" name="dateNaissance"
+                                id="dateNaissance" required>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="MoyenneGenerale">Moyenne :</label>
+                            <input type="number" step="0.1" class="form-control form-control-sm" name="MoyenneGenerale"
+                                min="0" max="20" id="MoyenneGenerale" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        Sauvegarder
+                    </button>
+                </div>
+                @* } *@
+            </form>
+        </div>
+    </div>
+</div>
