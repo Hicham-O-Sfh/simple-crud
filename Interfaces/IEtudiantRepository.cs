@@ -8,10 +8,13 @@ namespace simple_crud.Interfaces
 {
     public interface IEtudiantRepository
     {
-        Task<IEnumerable<Etudiant>> GetAll();
-        Task<Etudiant> GetById(int idEtudiant);
+        Task<IEnumerable<Etudiant>?> GetAll();
+        Task<Etudiant?> GetById(int idEtudiant);
+        Task Add(Etudiant etudiant);
         Task Update(Etudiant etudiant);
-        Task Delete(int idEtudiant);
+        Task Delete(Etudiant etudiant);
+        Task Exclude(Etudiant etudiant);
+        Task Include(Etudiant etudiant);
         Task<bool> Exists(int idEtudiant);
     }
 }

@@ -1,53 +1,80 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using simple_crud.Interfaces;
 using simple_crud.Models;
 
 namespace simple_crud.Controllers;
 
 public class EtudiantController : Controller
 {
-    List<Etudiant> _listEtudiant;
-    private readonly ILogger<EtudiantController> _logger;
 
-    public EtudiantController(ILogger<EtudiantController> logger)
+    private readonly IEtudiantService _etudiantService;
+
+    public EtudiantController(IEtudiantService etudiantService)
     {
-        _logger = logger;
-        this._listEtudiant = new List<Etudiant>()
-        {
-            new Etudiant(){Id = 1,DateNaissance = DateTime.Now,MoyenneGenerale = 17.5f,Nom = "nom_1",Prenom = "prenom_1"},
-            new Etudiant(){Id = 2,DateNaissance = DateTime.Now,MoyenneGenerale = 16.5f,Nom = "nom_2",Prenom = "prenom_2"},
-            new Etudiant(){Id = 3,DateNaissance = DateTime.Now,MoyenneGenerale = 15.5f,Nom = "nom_3",Prenom = "prenom_3"},
-            new Etudiant(){Id = 4,DateNaissance = DateTime.Now,MoyenneGenerale = 14.5f,Nom = "nom_4",Prenom = "prenom_4"}
-        };
+        this._etudiantService = etudiantService;
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        List<Etudiant> list = this._listEtudiant;
-        return View(list);
+        var etudiants = await this._etudiantService.GetAll();
+        return View(etudiants);
+    }
+
+    [HttpGet]
+    public IActionResult Add()
+    {
+        var etudiant = new Etudiant();
+        return PartialView("Etudiant/_ModalAdd", etudiant);
     }
 
     [HttpPost]
-    public IActionResult Add(Etudiant etudiant)
+    public async Task<IActionResult> Create(Etudiant etudiant)
     {
-        this._listEtudiant.Add(etudiant);
-        ModelState.Clear();
+        await this._etudiantService.Add(etudiant);
         return RedirectToAction("Index");
     }
 
-    [HttpPut("{id}")]
-    public IActionResult Edit(int id, Etudiant etudiant)
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
     {
-       
+        var etudiant = await this._etudiantService.GetById(id);
+        return PartialView("Etudiant/_ModalEdit", etudiant as Etudiant);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Update(Etudiant etudiant)
+    {
+        await this._etudiantService.Update(etudiant);
         return RedirectToAction("Index");
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
     {
-       
-        return RedirectToAction("Index");
+        var etudiant = await this._etudiantService.GetById(id);
+        return PartialView("Etudiant/_ModalDelete", etudiant as Etudiant);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Remove(int id)
+    {
+        if (!await this._etudiantService.Exists(id))
+            return NotFound();
+        await this._etudiantService.Delete(id);
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ManageExclusionStatus(int id)
+    {
+        var etudiant = await this._etudiantService.GetById(id);
+        if (etudiant!.IsExclut)
+            await this._etudiantService.Include(etudiant);
+        else
+            await this._etudiantService.Exclude(etudiant);
+        return Ok(etudiant.IsExclut);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

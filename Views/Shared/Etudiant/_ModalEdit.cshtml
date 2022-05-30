@@ -1,0 +1,57 @@
+@model Etudiant
+
+<div class="modal fade" id="modal-edit-etudiant" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Modifier un étudiant
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action='@Url.Action("Update", "Etudiant")' method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" asp-for="@Model.Id">
+                        <div class="col-md-6 mt-3">
+                            <div class="form-group">
+                                <label asp-for="Nom">Nom :</label>
+                                <input class="form-control form-control-sm" asp-for="Nom" required>
+                                <span asp-validation-for="Nom" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <div class="form-group">
+                                <label asp-for="Prenom">Prénom :</label>
+                                <input class="form-control form-control-sm" asp-for="Prenom" required>
+                                <span asp-validation-for="Prenom" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div class="form-group">
+                                <label for="DateNaissance">Date de naissance :</label>
+                                <input class="form-control form-control-sm" asp-for="DateNaissance" required>
+                                <span asp-validation-for="DateNaissance" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div class="form-group">
+                                <label for="MoyenneGenerale">Moyenne :</label>
+                                <input class="form-control form-control-sm" asp-for="MoyenneGenerale" required>
+                                <span asp-validation-for="MoyenneGenerale" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        Sauvegarder
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
